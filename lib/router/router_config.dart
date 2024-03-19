@@ -8,6 +8,9 @@ import 'package:projet_spotify_gorouter/screens/search_detail_screen.dart';
 import 'package:projet_spotify_gorouter/screens/search_screen.dart';
 import 'package:projet_spotify_gorouter/scaffold_with_navigation.dart';
 
+import '../Models/album.dart';
+import '../provider/provider.dart';
+
 /// Configuration du router (utilisation de GO_ROUTER)
 /// 
 /// 4 navigators (1 général plus 1 pour chaque branche)
