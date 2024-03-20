@@ -3,22 +3,18 @@ import 'dart:js_interop';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import '../Models/album.dart';
+import '../Models/tracks.dart';
 
 const urlApiAlbumDomain = 'api.spotify.com';
 const urlApiAlbum = '/api/v1';
-const token = 'BQC5JEXf6Wg1whtwSHtqxCCMabHj4369bHepVOY9hJIXappafe6wXdY7jK369LfZYaYWg8u2RBZ1Vdk-qU_YCzV3VrAMmt7jhabZE8STgy7I5EVWi2c';
-
-//  const headers = {
-//     'Content-Type': 'application/json',
-//     'Accept': 'application/json',
-//     'Authorization': 'Bearer $token',
-//   };
+const urlApiAlbumSpe = '/v1/albums';
+const token = 'BQCOsrAPq6S_Unsh02lypWWyZs3ieLKh3UZjR6b-ctg_-WW-V8GkSLmCWvaREHuwwU0zs5YWDRujVxxt1cIDvW6WPclU5G30TZ3o5tm1PpYWRc5qkAE';
 
 class Provider{
 
-Future<Album?> fetchAlbum() async {
+Future<Album?> fetchAlbum({required String id}) async {
  
-  var url = Uri.https(urlApiAlbumDomain, '$urlApiAlbum/browse/new-releases');
+  var url = Uri.https(urlApiAlbumDomain, '$urlApiAlbumSpe/$id');
   //urlApiAlbumDomain, '$urlApiAlbum/browse/new-releases'
   print(url);
   var response = await http.get(
@@ -29,6 +25,21 @@ Future<Album?> fetchAlbum() async {
     final Album album = Album.fromJson(data);
     print(data);
     return album;
+}
+
+Future<List<Tracks>> fetchTracks({required String id}) async{
+
+  List<Tracks> tracklist = [];
+
+  var url = Uri.https(urlApiAlbumDomain, '$urlApiAlbumSpe/$id');
+  var response = await http.get(
+    url,
+    headers : {'Authorization' : 'Bearer $token'}
+    );
+  Map<String, dynamic> data = jsonDecode(response.body);
+    data['tracks']['items']?.forEach((track) => tracklist.add(Tracks.fromJson(track)));
+    print(data);
+    return tracklist;
 }
 
 Future<List<Album>> fetchAlbums() async {

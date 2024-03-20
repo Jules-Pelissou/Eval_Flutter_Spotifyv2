@@ -3,26 +3,26 @@ import 'dart:convert';
 
 import '../provider/provider.dart';
 
-class Album {
+class Tracks {
   String _titre = "";
-  String _image = "";
+  bool _explicit = false;
   String _id = "";
   String _artistname = "";
-  List _tracks = [];
-  Album({String titre = "", String image = "", String id="", String artistname ="", List tracks = const []}) {
+  int _duree = 0;
+  Tracks({String titre = "", bool explicit = false, String id="", String artistname ="", int duree = 0}) {
     _titre = titre;
-    _image = image;
+    _explicit = explicit;
     _id = id;
     _artistname = artistname;
-    _tracks = tracks;
+    _duree = duree;
   }
 
   getTitre() {
     return _titre;
   }
 
-  getImage() {
-    return _image;
+  getExplicit() {
+    return _explicit;
   }
 
   getId(){
@@ -33,24 +33,22 @@ class Album {
     return _artistname;
   }
 
-  getTracks(){
-    return _tracks;
+  getDuree(){
+    return _duree;
   }
 
-  factory Album.fromJson(Map<String, dynamic> data) {
-    return Album(
+  factory Tracks.fromJson(Map<String, dynamic> data) {
+    return Tracks(
         titre: data['name'].toString() ?? "",
-        image: data['images'][0]?['url'].toString() ?? "",
+        explicit: data['explicit'] ?? false,
         id : data['id'].toString() ?? "",
         artistname : data['artists'][0]?['name'].toString() ?? "",
-        //tracks : data['tracks'] ?? "",
-        )
-        ;
+        duree : data['duration_ms'] ?? 0,
+        );
   }
 
   @override
   String toString() {
     return '$_titre';
-    //$_artistname 
   }
 }

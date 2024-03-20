@@ -12,7 +12,6 @@ class AlbumNewsScreen extends StatefulWidget {
 }
 
 class _AlbumNewsScreenDetail extends State<AlbumNewsScreen> {
-
   late Provider _provider;
   late List<Album> _album;
   //late Album _album;
@@ -35,22 +34,34 @@ class _AlbumNewsScreenDetail extends State<AlbumNewsScreen> {
     });
   }
 
-@override
-Widget build(BuildContext context) {
-  return Scaffold(
-    appBar: AppBar(title: const Text('Album News Screen')),
-    body: Center(
-      child: ListView.builder(
-        itemCount: _album.length,
-        itemBuilder: (context, index) {
-          return ElevatedButton(
-            onPressed: () {  },
-            child: Text(_album[index].toString()),
-          );
-        },
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('Album News Screen')),
+      body: Center(
+        child: ListView.builder(
+          itemCount: _album.length,
+          itemBuilder: (context, index) {
+            final album = _album[index];
+            return Column(
+              children: [
+                Image.network(
+                  album.getImage(),
+                  width: 100,
+                  height: 100,
+                ),
+                Text(album.getArtistname()),
+                ElevatedButton(
+                  onPressed: () {
+                    context.go('/a/albumdetails/${_album[index].getId()}');
+                  },
+                  child: Text(album.toString()),
+                ),
+              ],
+            );
+          },
+        ),
       ),
-    ),
-  );
-}
-
+    );
+  }
 }
