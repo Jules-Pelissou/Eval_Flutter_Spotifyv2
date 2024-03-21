@@ -30,6 +30,11 @@ class AlbumDetailScreen extends StatefulWidget {
 class _AlbumDetailScreenState extends State<AlbumDetailScreen> {
   
   final player = AudioPlayer();
+  final playlist = ConcatenatingAudioSource(
+    useLazyPreparation: true,
+    shuffleOrder: DefaultShuffleOrder(),
+    children: [],
+  );
   late Provider _provider;
   late Album _album;
   late Artist _artist;
@@ -104,17 +109,40 @@ class _AlbumDetailScreenState extends State<AlbumDetailScreen> {
                     ),
                     title: Text("$titre - $artist $explicit"),
                     subtitle: Text("$dureeemms minutes"),
-                    trailing: ElevatedButton(
-                      onPressed: () async {
-                        var audioUrl = track.getAudioUrl();
-                        if (audioUrl != null) {
-                          var source = AudioSource.uri(Uri.parse(audioUrl));
-                          await player.setAudioSource(source);
-                          await player.play();
-                        }
-                      },
-                      child: Text("Écouter"),
-                    ),
+                    trailing: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        ElevatedButton(
+                          onPressed: () async {
+                            var audioUrl = track.getAudioUrl();
+                            if (audioUrl != null) {
+                              var source = AudioSource.uri(Uri.parse(audioUrl));
+                              await player.setAudioSource(source);
+                              await player.play();
+                              print("Écoute terminée");
+                            } else {
+                              print("Il n'y a pas de lien");
+                            }
+                          },
+                          child: Text("Écouter"),
+                        ),
+                        SizedBox(width: 8),
+                        ElevatedButton(
+                          onPressed: () {
+                            var audioUrl = track.getAudioUrl();
+                            if (audioUrl != null) {
+                              playlist.add(AudioSource.uri(Uri.parse(audioUrl)));
+                              print("Musique ajoutée à la playlist");
+                              print("Longueur de la playlist : ${playlist.length}");
+                              //print("La playlist : ${playlist.toString()}");
+                            } else {
+                              print("Aucun lien");
+                            }
+                          },
+                          child: Text("Ajouter à la playlist"),
+                        ),
+                      ],
+                  ),
                   );
                 },
               ),

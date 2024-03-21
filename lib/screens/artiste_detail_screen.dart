@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:just_audio/just_audio.dart';
 
+
 import '../Models/album.dart';
 import '../provider/provider.dart';
 import '../Models/artiste.dart';
@@ -16,6 +17,12 @@ class ArtisteDetailScreen extends StatefulWidget {
 }
 
 class _ArtisteDetailScreenState extends State<ArtisteDetailScreen> {
+  final player = AudioPlayer();
+  final playlist = ConcatenatingAudioSource(
+    useLazyPreparation: true,
+    shuffleOrder: DefaultShuffleOrder(),
+    children: [],
+  );
   late Provider _provider;
   late Artist _artist;
   List _tracks = [];
@@ -33,7 +40,7 @@ class _ArtisteDetailScreenState extends State<ArtisteDetailScreen> {
     var result = await _provider.fetchArtistFonctAlbum(id: widget.id);
     var tracklist = await _provider.fetchTracksFromArtist(id: widget.id);
     print("Salut c'est ninho : $result");
-    print("SaluT c'est JOHNY HALLYDAY $tracklist");
+    print("Salut c'est JOHNY HALLYDAY $tracklist");
     setState(() {
       if (result != null) {
         _artist = result;
@@ -57,7 +64,7 @@ class _ArtisteDetailScreenState extends State<ArtisteDetailScreen> {
             Text(_artist.getName()),
             Text('Followers : ${_artist.getFollowers()}'),
             Text(
-                'Top ${_artist.getPopularity()} des artistes les plus écoutés'),
+                'Popularité : ${_artist.getPopularity()}'),
             Expanded(
               child: ListView.builder(
                 itemCount: _artist.getGenre().length,
@@ -76,9 +83,6 @@ class _ArtisteDetailScreenState extends State<ArtisteDetailScreen> {
                   var track = _tracks[index];
 
                   String titre = track.getTitre();
-
-                  // Calcul de la durée
-
                   double dureeemms = track.getDuree();
                   dureeemms = (dureeemms / 1000) as double;
                   dureeemms = dureeemms / 60;
@@ -94,9 +98,42 @@ class _ArtisteDetailScreenState extends State<ArtisteDetailScreen> {
                   String artist = track.getArtistname();
 
                   return ListTile(
-                    title: Text(
-                        "${_tracks[index].toString()} - $artist $explicit"),
+                    title: Text("$titre - $artist $explicit"),
                     subtitle: Text("$dureeemms minutes"),
+                    trailing: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        ElevatedButton(
+                          onPressed: () async {
+                            var audioUrl = track.getAudioUrl();
+                            if (audioUrl != null) {
+                              var source = AudioSource.uri(Uri.parse(audioUrl));
+                              await player.setAudioSource(source);
+                              await player.play();
+                              print("Écoute terminée");
+                            } else {
+                              print("Il n'y a pas de lien");
+                            }
+                          },
+                          child: Text("Écouter"),
+                        ),
+                        SizedBox(width: 8),
+                        ElevatedButton(
+                          onPressed: () {
+                            var audioUrl = track.getAudioUrl();
+                            if (audioUrl != null) {
+                              playlist.add(AudioSource.uri(Uri.parse(audioUrl)));
+                              print("Musique ajoutée à la playlist");
+                              print("Longueur de la playlist : ${playlist.length}");
+                              //print("La playlist : ${playlist.toString()}");
+                            } else {
+                              print("Aucun lien");
+                            }
+                          },
+                          child: Text("Ajouter à la playlist"),
+                        ),
+                      ],
+                  ),
                   );
                 },
               ),

@@ -89,9 +89,11 @@ final GoRouter router = GoRouter(
                 routes: [
                   // child route
                   GoRoute(
-                    path: 'searchdetails',
+                    path: 'searchdetails/:type/:recherche',
                     builder: (BuildContext context, GoRouterState state) {
-                      return const SearchDetailsScreen();
+                      final type = state.pathParameters['type']!;
+                      final recherche = state.pathParameters['recherche']!;
+                      return SearchDetailsScreen(type : type , recherche: recherche);
                     },
                   ),
                 ],

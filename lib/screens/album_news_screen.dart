@@ -14,7 +14,6 @@ class AlbumNewsScreen extends StatefulWidget {
 class _AlbumNewsScreenDetail extends State<AlbumNewsScreen> {
   late Provider _provider;
   late List<Album> _album;
-  //late Album _album;
 
   @override
   void initState() {
