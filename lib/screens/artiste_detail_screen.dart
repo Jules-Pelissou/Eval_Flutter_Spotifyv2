@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:just_audio/just_audio.dart';
 
 import '../Models/album.dart';
 import '../provider/provider.dart';
@@ -18,7 +19,6 @@ class _ArtisteDetailScreenState extends State<ArtisteDetailScreen> {
   late Provider _provider;
   late Artist _artist;
   List _tracks = [];
-  
 
   @override
   void initState() {
@@ -26,6 +26,8 @@ class _ArtisteDetailScreenState extends State<ArtisteDetailScreen> {
     _provider = Provider();
     _get();
   }
+
+ 
 
   void _get() async {
     var result = await _provider.fetchArtistFonctAlbum(id: widget.id);
@@ -40,71 +42,72 @@ class _ArtisteDetailScreenState extends State<ArtisteDetailScreen> {
     });
   }
 
-@override
-Widget build(BuildContext context) {
-  return Scaffold(
-    appBar: AppBar(title: const Text('Artist Screen')),
-    body: Center(
-      child: Column(
-        children: [
-          Image.network(
-            _artist.getImage(),
-            width: 250,
-            height: 250,
-          ),
-          Text(_artist.getName()),
-          Text('Followers : ${_artist.getFollowers()}'),
-          Text('Top ${_artist.getPopularity()} des artistes les plus écoutés'),
-          Expanded(
-            child: ListView.builder(
-              itemCount: _artist.getGenre().length,
-              itemBuilder: (context, index) {
-                return 
-                  Text(_artist.getGenre()[index]);
-              },
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('Artist Screen')),
+      body: Center(
+        child: Column(
+          children: [
+            Image.network(
+              _artist.getImage(),
+              width: 250,
+              height: 250,
             ),
-          ),
+            Text(_artist.getName()),
+            Text('Followers : ${_artist.getFollowers()}'),
+            Text(
+                'Top ${_artist.getPopularity()} des artistes les plus écoutés'),
+            Expanded(
+              child: ListView.builder(
+                itemCount: _artist.getGenre().length,
+                itemBuilder: (context, index) {
+                  return Text(_artist.getGenre()[index]);
+                },
+              ),
+            ),
 
-          // Faire afficher les tracklist mais fait rien afficher + fait bugger la page d'accueil
+            // Faire afficher les tracklist mais fait rien afficher + fait bugger la page d'accueil
 
-          // Expanded(
-          //   child: ListView.builder(
-          //     itemCount: _tracks.length,
-          //     itemBuilder: (BuildContext context, int index) {
-          //       var track = _tracks[index];
+            Expanded(
+              child: ListView.builder(
+                itemCount: _tracks.length,
+                itemBuilder: (BuildContext context, int index) {
+                  var track = _tracks[index];
 
-          //       String titre = track.getTitre();
+                  String titre = track.getTitre();
 
-          //       // Calcul de la durée
+                  // Calcul de la durée
 
-          //       double dureeemms = track.getDuree();
-          //       dureeemms = (dureeemms / 1000) as double;
-          //       dureeemms = dureeemms / 60;
-          //       String formattedDureeemms = dureeemms.toStringAsFixed(2);
-          //       dureeemms = double.parse(formattedDureeemms);
+                  double dureeemms = track.getDuree();
+                  dureeemms = (dureeemms / 1000) as double;
+                  dureeemms = dureeemms / 60;
+                  String formattedDureeemms = dureeemms.toStringAsFixed(2);
+                  dureeemms = double.parse(formattedDureeemms);
 
-          //       String explicit = "";
-          //       if (track.getExplicit() == false) {
-          //         explicit = "";
-          //       } else {
-          //         explicit = "(Explicit)";
-          //       }
-          //       String artist = track.getArtistname();
+                  String explicit = "";
+                  if (track.getExplicit() == false) {
+                    explicit = "";
+                  } else {
+                    explicit = "(Explicit)";
+                  }
+                  String artist = track.getArtistname();
 
-          //       return ListTile(
-          //         title: Text("${_tracks[index].toString()} - $artist $explicit"),
-          //         subtitle: Text("$dureeemms minutes"),
-          //       );
-          //     },
-          //   ),
-          // ),
-          ElevatedButton(
-            onPressed: () => context.go('/a'),
-            child: const Text('Go back'),
-          ),
-        ],
+                  return ListTile(
+                    title: Text(
+                        "${_tracks[index].toString()} - $artist $explicit"),
+                    subtitle: Text("$dureeemms minutes"),
+                  );
+                },
+              ),
+            ),
+            ElevatedButton(
+              onPressed: () => context.go('/a'),
+              child: const Text('Go back'),
+            ),
+          ],
+        ),
       ),
-    ),
-  );
-}
+    );
+  }
 }
