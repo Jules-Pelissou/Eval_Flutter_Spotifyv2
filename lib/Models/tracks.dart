@@ -1,8 +1,6 @@
 import 'dart:js_interop';
 import 'dart:convert';
 
-import '../provider/provider.dart';
-
 class Tracks {
   String _titre = "";
   bool _explicit = false;

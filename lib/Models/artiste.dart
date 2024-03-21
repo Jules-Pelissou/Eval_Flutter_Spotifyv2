@@ -1,58 +1,62 @@
 import 'dart:js_interop';
 import 'dart:convert';
 
-import '../provider/provider.dart';
+class Artist {
 
-class Artiste {
-  // String _href = "";
-  // String _image = "";
-  // String _id = "";
-  // String _artistname = "";
-  // Album({String titre = "", String image = "", String id="", String artistname =""}) {
-  //   _titre = titre;
-  //   _image = image;
-  //   _id = id;
-  //   _artistname = artistname;
-  // }
+  String _name = "";
+  int _popularity = 0;
+  String _id = "";
+  String _image = "";
+  List _genre = [];
+  int _followers = 0;
+  Artist({String titre = "", String image = "", String id="", int popularity =0, List genre = const [], int followers = 0}) {
+    _name = titre;
+    _image = image;
+    _id = id;
+    _popularity = popularity;
+    _genre = genre;
+    _followers = followers;
+  }
 
-  // getTitre() {
-  //   return _titre;
-  // }
+  getName() {
+    return _name;
+  }
 
-  // getImage() {
-  //   return _image;
-  // }
+  getImage() {
+    return _image;
+  }
 
-  // getId(){
-  //   return _id;
-  // }
+  getId(){
+    return _id;
+  }
 
-  // getArtistname(){
-  //   return _artistname;
-  // }
+  getPopularity(){
+    return _popularity;
+  }
 
-  // factory Album.fromJson(Map<String, dynamic> data) {
-  //   return Album(
-  //       titre: data['name'].toString() ?? "",
-  //       image: data['image']?['url'].toString() ?? "",
-  //       id : data['id'].toString() ?? "",
-  //       artistname : data['artists']?['name'].toString() ?? "");
-  // }
-
-  // @override
-  // String toString() {
-  //   return '$_image $_titre $_artistname $_id';
-  // }
+  List<String> getGenre(){
+  return List<String>.from(_genre);
+}
 
 
-  // "external_urls": {
-  //                           "spotify": "https://open.spotify.com/artist/70kkdajctXSbqSMJbQO424"
-  //                       },
-  //                       "href": "https://api.spotify.com/v1/artists/70kkdajctXSbqSMJbQO424",
-  //                       "id": "70kkdajctXSbqSMJbQO424",
-  //                       "name": "Kacey Musgraves",
-  //                       "type": "artist",
-  //                       "uri": "spotify:artist:70kkdajctXSbqSMJbQO424"
+  getFollowers(){
+    return _followers;
+  }
+
+  factory Artist.fromJson(Map<String, dynamic> data) {
+    return Artist(
+        titre: data['name'].toString() ?? "",
+        image: data['images'][0]?['url'].toString() ?? "",
+        id : data['id'].toString() ?? "",
+        popularity : data['popularity'] ?? "",
+        genre : List<String>.from(data['genres'] ?? []),
+        followers: data['followers']?['total'] ?? "");
+  }
+
+  @override
+  String toString() {
+    return '$_name $_popularity $_id $_followers $_genre';
+  }
 
 }
 

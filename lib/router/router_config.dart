@@ -66,9 +66,10 @@ final GoRouter router = GoRouter(
                     },
                   ),
                   GoRoute(
-                    path: 'artistedetails',
+                    path: 'artistedetails/:id',
                     builder: (BuildContext context, GoRouterState state) {
-                      return const ArtisteDetailScreen();
+                      final id = state.pathParameters['id']!;
+                      return ArtisteDetailScreen(id: id);
                     },
                   ),
                 ],
