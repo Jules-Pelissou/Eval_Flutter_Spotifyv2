@@ -36,8 +36,7 @@ class Artist {
 
   List<String> getGenre(){
   return List<String>.from(_genre);
-}
-
+  }
 
   getFollowers(){
     return _followers;
