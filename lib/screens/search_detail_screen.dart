@@ -56,7 +56,7 @@ class _SearchScreenDetailState extends State<SearchDetailsScreen> {
         setState(() {
           if (result != null) {
             _artist = result;
-            print("Résultat de l'album : $_artist");
+            //print("Résultat de l'artiste : $_artist");
           }
         });
         break;
@@ -66,7 +66,7 @@ class _SearchScreenDetailState extends State<SearchDetailsScreen> {
         setState(() {
           if (result != null) {
             _tracks = result;
-            print("Résultat de l'album : $_tracks");
+            print("Résultat de la chanson : $_tracks");
           }
         });
         break;

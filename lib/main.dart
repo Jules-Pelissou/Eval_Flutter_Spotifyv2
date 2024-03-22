@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:projet_spotify_gorouter/router/router_config.dart';
+import 'package:sqflite_common_ffi_web/sqflite_ffi_web.dart';
+import 'package:sqflite/sqflite.dart';
+
 
 /// Exemple d'application avec double navigation
 ///  - une avec une bottom navigation bar (3 branches)
@@ -7,6 +10,7 @@ import 'package:projet_spotify_gorouter/router/router_config.dart';
 
 void main() => runApp(const MyApp());
 
+DatabaseFactory databaseFactory = databaseFactoryFfiWeb;
 /// The main app.
 class MyApp extends StatelessWidget {
   const MyApp({super.key});

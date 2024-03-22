@@ -16,7 +16,7 @@ const urlApiAlbumSpe = '/v1/albums';
 const urlApiArtistSpe = '/v1/artists';
 
 const token =
-    'BQCusZ6iA_A9a_Nq7R6jzJ0v4Wv6sJkB9oNrU0IluKXyM-LoSoEwwzWtPPd7hfwsSsHhFmXQJE5C37UQf893IRggNkjTGwcoznNGh7vj1dfY7lqjkkw';
+    'BQA9vYuY7RSJVeRC5fIKDsnBNrD0a-08n6PTDgKthAvpjYECzgCnzzPdQMGFMey9pinZVEJucKjdDEbLK7xf7uqAfRH3-zlgBS3vEe5dcfO8v0h8YB8';
 
 class Provider {
 // Provider pour un Album spécifique
@@ -24,7 +24,7 @@ class Provider {
   Future<Album?> fetchAlbum({required String id}) async {
     var url = Uri.https(urlApiAlbumDomain, '$urlApiAlbumSpe/$id');
     //urlApiAlbumDomain, '$urlApiAlbum/browse/new-releases'
-    print(url);
+    print("PAS LA BONNE FONCTION $url");
     var response =
         await http.get(url, headers: {'Authorization': 'Bearer $token'});
     Map<String, dynamic> data = jsonDecode(response.body);
@@ -114,14 +114,14 @@ class Provider {
       {required String recherche, required String type}) async {
     List<Artist> resultats = [];
     
-    var encodedRecherche = Uri.encodeComponent(recherche);
+    //var encodedRecherche = Uri.encodeComponent(recherche);
 
     var url = Uri.parse(
-    'https://$urlApiAlbumDomain/v1/search?type=artist&market=FR&q=$encodedRecherche');
+    'https://$urlApiAlbumDomain/v1/search?q=$recherche&type=artist&market=FR');
+    print("DANS LA TRUC RECHERCHE : $url");
     var response =
         await http.get(url, headers: {'Authorization': 'Bearer $token'});
     var data = jsonDecode(response.body);
-    print('La liste qui est $data');
     data['artists']['items']?.forEach(
         (searchedAlbum) => resultats.add(Artist.fromJson(searchedAlbum)));
     //list.add(Album.fromJson(album)));
