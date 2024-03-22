@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:projet_spotify_gorouter/Models/album.dart';
 import 'package:projet_spotify_gorouter/provider/provider.dart';
+import 'package:projet_spotify_gorouter/screens/search_detail_screen.dart';
 
 class BoutonSelection extends StatefulWidget {
   const BoutonSelection({Key? key, required this.onValueChanged}) : super(key: key);
@@ -13,7 +14,7 @@ class BoutonSelection extends StatefulWidget {
 }
 
 class _BoutonSelectionState extends State<BoutonSelection> {
-  static const List<String> list = <String>['Albums', 'Artistes', 'Chansons', 'Tout'];
+  static const List<String> list = <String>['Albums', 'Artistes', 'Chansons'];
   String dropdownValue = list.first;
 
   @override
@@ -65,7 +66,7 @@ class _SearchScreenDetail extends State<SearchScreen> {
   }
 
   void _get() async {
-    // Mettez en œuvre la récupération des données ici
+    
   }
 
   @override
@@ -83,6 +84,7 @@ class _SearchScreenDetail extends State<SearchScreen> {
                 icon: Icon(Icons.search),
                 onPressed: () {
                   context.go("/b/searchdetails/$selectedValue/${rechercheController.text}");
+                  //SearchDetailsScreen(recherche: rechercheController.text, type : selectedValue);
                 },
               ),
             ),
@@ -90,7 +92,7 @@ class _SearchScreenDetail extends State<SearchScreen> {
           BoutonSelection(
             onValueChanged: (value) {
               setState(() {
-                selectedValue = value; // Mettre à jour la valeur sélectionnée
+                selectedValue = value; 
               });
             },
           ),

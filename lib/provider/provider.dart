@@ -16,7 +16,7 @@ const urlApiAlbumSpe = '/v1/albums';
 const urlApiArtistSpe = '/v1/artists';
 
 const token =
-    'BQAdKbe4gMdHJxhvvbL5bGW3oVcYy-q94mjbMCzpceMdPAsMhGG8B_7SYeZvmJ_ol-Qt6uAPhUV4JNVN3Io3Qj-5i56Z3ccaUcFI3HGoeHZYzRMSJds';
+    'BQCusZ6iA_A9a_Nq7R6jzJ0v4Wv6sJkB9oNrU0IluKXyM-LoSoEwwzWtPPd7hfwsSsHhFmXQJE5C37UQf893IRggNkjTGwcoznNGh7vj1dfY7lqjkkw';
 
 class Provider {
 // Provider pour un Album spécifique
@@ -138,7 +138,7 @@ Future<List<Tracks>> fetchTracksBySearch(
   var data = jsonDecode(response.body);
   print('La liste qui est $data');
   // Vérifier si "tracks" existe dans la réponse
-    data['tracks']?.forEach(
+    data['tracks']['items']?.forEach(
         (searchedTrack) => resultats.add(Tracks.fromJson(searchedTrack)));
 
 

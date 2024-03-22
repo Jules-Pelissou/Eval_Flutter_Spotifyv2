@@ -16,7 +16,6 @@ class AlbumDetailScreen extends StatefulWidget {
   State<AlbumDetailScreen> createState() => _AlbumDetailScreenState();
 }
 
-
 // final duration = await player.setUrl(           // Load a URL
 //     'https://foo.com/bar.mp3');                 // Schemes: (https: | file: | asset: )
 // player.play();                                  // Play without waiting for completion
@@ -28,7 +27,6 @@ class AlbumDetailScreen extends StatefulWidget {
 // await player.stop();                            // Stop and free resources
 
 class _AlbumDetailScreenState extends State<AlbumDetailScreen> {
-  
   final player = AudioPlayer();
   final playlist = ConcatenatingAudioSource(
     useLazyPreparation: true,
@@ -39,18 +37,14 @@ class _AlbumDetailScreenState extends State<AlbumDetailScreen> {
   late Album _album;
   late Artist _artist;
   List _tracks = [];
+  var playing = false;
+  var pause = false;
 
   @override
   void initState() {
     super.initState();
     _provider = Provider();
     _get();
-  }
-
-   @override
-  void dispose() {
-    player.dispose();
-    super.dispose();
   }
 
   void _get() async {
@@ -61,7 +55,6 @@ class _AlbumDetailScreenState extends State<AlbumDetailScreen> {
       if (result != null) {
         _album = result;
         _tracks = tracklist;
-        //_artist = artiste!;
       }
     });
   }
@@ -118,6 +111,8 @@ class _AlbumDetailScreenState extends State<AlbumDetailScreen> {
                             if (audioUrl != null) {
                               var source = AudioSource.uri(Uri.parse(audioUrl));
                               await player.setAudioSource(source);
+                              playing = true;
+                              print("PLAYING THE PLAYTAPUS : $playing");
                               await player.play();
                               print("Écoute terminée");
                             } else {
@@ -131,18 +126,35 @@ class _AlbumDetailScreenState extends State<AlbumDetailScreen> {
                           onPressed: () {
                             var audioUrl = track.getAudioUrl();
                             if (audioUrl != null) {
-                              playlist.add(AudioSource.uri(Uri.parse(audioUrl)));
+                              playlist
+                                  .add(AudioSource.uri(Uri.parse(audioUrl)));
                               print("Musique ajoutée à la playlist");
-                              print("Longueur de la playlist : ${playlist.length}");
-                              //print("La playlist : ${playlist.toString()}");
+                              print(
+                                  "Longueur de la playlist : ${playlist.length}");
                             } else {
                               print("Aucun lien");
                             }
                           },
                           child: Text("Ajouter à la playlist"),
                         ),
+                        SizedBox(width: 8),
+                        if (playing == true)
+                          IconButton(
+                            icon: const Icon(Icons.pause),
+                            iconSize: 25,
+                            onPressed: player.pause,
+                          ),
+                        if (pause == true)
+                          ElevatedButton(
+                            onPressed: () {
+                              pause = false;
+                              playing = true;
+                              //player.resume();
+                            },
+                            child: Text("Reprendre"),
+                          ),
                       ],
-                  ),
+                    ),
                   );
                 },
               ),
@@ -152,7 +164,8 @@ class _AlbumDetailScreenState extends State<AlbumDetailScreen> {
               child: const Text('Go back'),
             ),
             ElevatedButton(
-              onPressed: () => context.go('/a/artistedetails/${_album.getArtistid()}'),
+              onPressed: () =>
+                  context.go('/a/artistedetails/${_album.getArtistid()}'),
               child: const Text('Go Artiste Detail'),
             ),
           ],
